@@ -1,0 +1,24 @@
+	.text
+	.global	main
+ 
+main:
+	LDR	R1,TEST_NUM
+
+	MOV	R0,#0
+LOOP:	CMP	R1,#0
+	BEQ	END
+	LSR	R2,R1,#1
+	AND	R1,R1,R2
+	ADD	R0,#1
+	B	LOOP
+
+END:	BX	LR
+
+TEST_NUM:
+//	.word	0x103fe00f	// 9;  0001 0000 0011 1111 1110 0000 0000 1111
+//	.word	0xff770ffe	// 11; 1111 1111 0111 0111 0000 1111 1111 1110
+	.word	0x00ffff77	// 16; 0000 0000 1111 1111 1111 1111 0111 0111
+
+	.end
+
+
