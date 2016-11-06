@@ -2,22 +2,32 @@
 	.global	main
  
 main:
-	MOV	R5,#0		// final answer
+	MOV	R5,#0		// final answer - ones
+	MOV	R6,R5		// final answer - zeros
+	MOV	R7,R5		// final answer - alternating
 	LDR	R4,=TEST_NUM	// pointer to test array
 
 1:	LDR	R1,[R4],#4	// r1 <- *r4++
 	CMP	R1,#0		// end of test data is signaled with 0
 	BEQ	2f
 
-	PUSH	{R1-R5,LR}	// save our state
+	PUSH	{R1-R5,LR}	// save our registers; multiple of 8 bytes
 	BL	ONES		// count 1's in R0, returned in R1
-	POP	{R1-R5,LR}	// restore state
+	POP	{R1-R5,LR}	// restore our registers
 
 	CMP	R5,R0		// is return value larger than accumulator?
 	MOVLT	R5,R0		// R1 was larger, so save it
+
+	PUSH	{R1-R5,LR}	// save our registers; multiple of 8 bytes
+	BL	ZEROS		// count 1's in R0, returned in R1
+	POP	{R1-R5,LR}	// restore our registers
+
+	CMP	R6,R0		// is return value larger than accumulator?
+	MOVLT	R6,R0		// R1 was larger, so save it
+
 	B	1b		// go back around
-2:
-	MOV	R0,R5		// copy R5 to R0 so that it becomes status
+2:	
+	MOV	R0,R6		// copy R5 to R0 so that it becomes status
 	BX	LR		// return
 
 /*
@@ -38,6 +48,23 @@ ONES:
 	B	1b
 
 2:	BX	LR		// return
+
+
+/*
+ * ZEROS - count consecutive 0's in a 32-bit word.
+ * IN:
+ *	R1 - word to test
+ * OUT:
+ *	R0 - longest string of 0's
+ */
+ZEROS:
+	MVN	R1,R1		// flip all bits in R1
+	PUSH	{R1,LR}
+	BL	ONES		// count all 1's in R1, which counts all 0's in input
+	POP	{R1,LR}
+
+	BX	LR
+
 
 TEST_NUM:
 	.word	0xff770ffe	// 11; 1111 1111 0111 0111 0000 1111 1111 1110
