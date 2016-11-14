@@ -77,13 +77,12 @@ ALT:
 	LDR	R2,=0xAAAAAAAA	// XOR against alternating 1-0 pattern; this converts
 	EOR	R1,R1,R2	// our test to a longest zeros or longest ones test
 
-	MOV	R3,R1		// save a copy of R1, our test number
 	PUSH	{R1-R3,LR}
 	BL	ONES
 	POP	{R1-R3,LR}
 
 	MOV	R2,R0		// save result of ONES
-	MOV	R1,R3		// restore our saved test number
+
 	PUSH	{R1-R3,LR}
 	BL	ZEROS
 	POP	{R1-R3,LR}
