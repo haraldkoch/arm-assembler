@@ -89,10 +89,8 @@ ALT:
 	POP	{R1-R3,LR}
 
 	CMP	R0,R2		// return result of ONES or ZEROS, whichever is larger
-	BGT	RETURN
-	MOV	R0,R2
-
-RETURN:	BX	LR
+	MOVLT	R0,R2
+	BX	LR
 
 
 TEST_NUM:
