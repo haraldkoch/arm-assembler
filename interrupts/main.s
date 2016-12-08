@@ -1,4 +1,5 @@
 	.include "address_map_arm.s"
+	.include "defines.s"
 /*
  * This program demonstrates the use of interrupts using the KEY and timer ports. It
  * 	1. displays a sweeping red light on LEDR, which moves left and right

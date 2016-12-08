@@ -1,4 +1,5 @@
 			.include "address_map_arm.s"
+			.include "defines.s"
 			.extern	LEDR_DIRECTION
 			.extern	LEDR_PATTERN
 
